@@ -37,12 +37,11 @@ fun main() {
         }
     } while (!inPutNumero)
 
-   if (numeroUno <  numeroDos && numeroUno < numeroTres ){
-       println("estan ordenados de menor a mayor")
-   }else{
-       println("no estan ordenados de menor a mayor ")
-   }
-
+    if (numeroUno+1 ==   numeroDos && numeroUno+2 == numeroTres ){
+        println("estan ordenados ")
+    }else{
+        println("no estan ordenados")
+    }
 
 
 

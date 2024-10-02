@@ -1,7 +1,7 @@
 fun main() {
     var dividendo :Int = 0
     var divisor: Int = 0
-    var resultado: Int = 0
+    var resto: Int = 0
     var contador: Int = 0
     var inPutDivision: Boolean = false
 
@@ -14,7 +14,9 @@ fun main() {
             println("el dividendo debe ser mayor que 0")
         }
     }while (!inPutDivision)
+
     inPutDivision = false
+
     do {
         println("introduce el divisor")
         divisor = readln().toIntOrNull()?:0
@@ -26,14 +28,14 @@ fun main() {
     }while (!inPutDivision)
 
 
-     resultado = dividendo
+     resto = dividendo
     do {
-        println(resultado)
-        resultado -=  divisor
+        println(resto)
+        resto -=  divisor
         contador++
 
-    }while (resultado > divisor)
-    println(resultado)
-    println("el resto es $resultado y el cociente es $contador")
+    }while (resto >= divisor)
+    println(resto)
+    println("el resto es $resto y el cociente es $contador")
 
 }

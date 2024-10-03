@@ -11,60 +11,49 @@ fun main() {
         var contadorA: Int = 0
         var contadorB: Int = 0
         for (j in 0 .. 5){
-            if (i < 4){
+            if (j <= 4){
                 if ((0..100).random() <= jugadorA){
                     contadorA++
-                    println("jugadorA gol numero $contadorA")
-
-
-                }else {
-                    println("jugadorB fallo")
                 }
 
                 if ((0..100).random() <= jugadorB){
                     contadorB++
-                    println("jugadorB gol numero $contadorB ")
+                }
 
 
-                }else {
-                    println("jugadorB fallo")
+            }
+            if (j == 5){
+
+                if ((0..100).random() <= jugadorA){
+                    contadorA+=2
+
+                }
+
+                if ((0..100).random() <= jugadorB){
+                    contadorB+=2
+
                 }
             }
 
         }
         if (contadorA > contadorB){
-            contadorRondaA++
+            contadorRondaA+=1
+            println ("la  ronda $i la gana jugadorA con $contadorA goles y el perdedor jugadorB con $contadorB goles")
+        }else {
+            contadorRondaB+=1
+            println ("la  ronda $i la gana jugadorB con $contadorB goles y el perdedor jugadorA con $contadorA goles")
         }
 
 
     }
-    println("antes del ultimo gol $contadorA")
-    println("antes del ultimo gol $contadorB")
 
-    if ((0..100).random() <= jugadorA){
-        contadorA+=2
-        println("jugadorA gol numero $contadorA")
-
-
-    }else {
-        println("jugadorB fallo")
+    if (contadorRondaA > contadorRondaB){
+        println("el ganador es jugadorA con $contadorRondaA frente a jugadorB $contadorRondaB ")
+    }else if(contadorRondaA< contadorRondaB){
+        println("el ganador es jugadorB con $contadorRondaB frente a jugadorA $contadorRondaA ")
+    }else{
+        println("empate el jugadorA tiene $contadorRondaA y jugadorB tiene $contadorRondaB")
     }
 
-    if ((0..100).random() <= jugadorB){
-        contadorB+=2
-        println("jugadorB gol numero $contadorB ")
 
-
-    }else {
-        println("jugadorB fallo")
-    }
-    println("contadorA $contadorA" )
-    println("contadorB $contadorB")
-    if (contadorA > contadorB) {
-        println("gana jugadorA con $contadorA goles")
-    }else if (contadorA == contadorB){
-        println("empate")
-    }else {
-        println("gana jugadorB con $contadorB goles ")
-    }
 }

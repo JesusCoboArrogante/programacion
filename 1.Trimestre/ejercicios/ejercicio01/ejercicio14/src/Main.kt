@@ -7,38 +7,40 @@ fun main() {
 
     do {
         println("introduce un numero")
-        numero = readln().toIntOrNull()?:100000
-        if (numero < 100000 && numero > -100000){
+        numero = readln().toIntOrNull() ?: 100000
+        if (numero < 100000 && numero > -100000) {
             println("correcto")
             inPutSalida = true
-        }else{
+        } else {
             println("caracter incorrecto o el numero debe ser menor a 6 cifras")
         }
-    }while (!inPutSalida)
+    } while (!inPutSalida)
 
     inPutSalida = false
 
     do {
-       if (numero < cifraPositiva && numero >=0 ){
+        if (numero < cifraPositiva && numero >= 0) {
             println("$numero tiene $contador")
             inPutSalida = true
-        }else{
-            cifraPositiva*=10
+        } else if (numero >= 0)  {
+            cifraPositiva *= 10
             contador++
+
         }
 
 
-
-        if (numero > cifraNegativa && numero < 0 ){
+        if (numero > cifraNegativa && numero < 0) {
             println("$numero tiene $contador")
             inPutSalida = true
-        }else{
-            cifraNegativa*=10
+        } else if (numero < 0) {
+            cifraNegativa *= 10
             contador++
+
         }
-    }while (!inPutSalida)
 
 
+    } while (!inPutSalida)
 
 
 }
+

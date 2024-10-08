@@ -1,25 +1,18 @@
+import java.time.temporal.ValueRange
+
 fun main() {
 
     var numeroUno: Int = entrada("Introduce el 1º numero")
     var numeroDos: Int = entrada("introduce el 2º numerp")
-    val signo: Char = simbolo("introduce un de estos simbolos(+, -, * o /)")
+    val signo: String = simbolo("introduce un de estos simbolos(+, -, * o /)")
+    calculadora(signo, numeroUno,numeroDos)
 
 
 
 
 
 
-    /*if (signo == sumar){
-            miSuma(numeroUno,numeroDos)
-    }else if (signo == restar){
-        miResta(numeroUno,numeroDos)
-    }else if (signo == multiplicar){
-        miMultiplicar(numeroUno, numeroDos)
-    }else if (signo == dividir){
-        miDividir(numeroUno, numeroDos)
-    }
 
-     */
 }
 
 
@@ -30,10 +23,10 @@ fun entrada(cadena:String):Int{
         println("introduce el  numero")
         numero = readln().toIntOrNull()?: Int.MIN_VALUE
 
-        if (numero >= 0){
+        if (numero > 0){
             inPutSalida = true
         }else{
-            println("el numero debe ser mayor o igual a 0")
+            println("el numero debe ser mayor 0")
         }
 
 
@@ -42,20 +35,37 @@ fun entrada(cadena:String):Int{
     return numero
 }
 
-fun  simbolo(cadena: String): Char{
-    var simbolo: Char = ' '
+fun  simbolo(cadena: String): String{
+    var simbolo: String = " "
     var inPutSalida: Boolean = false
     do {
         println("introduce uno de estos simbolos")
         simbolo = readln()
-        if (simbolo != '+' || simbolo != '-' || simbolo != '*' || simbolo != '/'){
-            println("simbolo incorrecto")
-        }else{
+        if (simbolo == "+" || simbolo == "-" || simbolo == "*" || simbolo == "/"){
             inPutSalida = true
+        }else{
+            println("simbolo incorrecto")
+
         }
     }while (!inPutSalida)
     return simbolo
 }
+
+fun calculadora(signo: String, numeroUno:Int, numeroDos: Int){
+
+    if (signo == "+" ){
+            miSuma(numeroUno,numeroDos)
+    }else if (signo == "-"){
+        miResta(numeroUno,numeroDos)
+    }else if (signo == "*"){
+        miMultiplicar(numeroUno, numeroDos)
+    }else if (signo == "/"){
+        miDividir(numeroUno, numeroDos)
+    }
+
+
+}
+
 
 fun miSuma(a:Int, b:Int){
     val resultado = a + b

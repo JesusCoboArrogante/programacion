@@ -2,7 +2,6 @@
 fun main() {
 
     var jugadorUno: Int = funVerificarDinero("¿cuanto dinero tienes?") //se almacena el dinero que nosotro tengamos
-    val jugadorDos: Int = Int.MAX_VALUE //se almacena el dinero del crupier
     var ganar: Boolean = true
     var acciones: String = "" // se almacena dos distintas acciones que hay en el codigo
     var cartaJugadorUno = 0

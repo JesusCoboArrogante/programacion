@@ -17,13 +17,13 @@ fun main() {
         println(iniTime - finTime)
     }while (iniTime - fintiempo < 1000)
 
-            println(iniTime - finTime)
+    println(iniTime - finTime)
 
 
 
    var numero = 0
 
-   do {
+   /*do {
        println(numero)
 
 
@@ -36,7 +36,7 @@ fun main() {
        }
        Thread.sleep(1000)
     }while (numero< fintiempo)
-
+    */
 
 }
 

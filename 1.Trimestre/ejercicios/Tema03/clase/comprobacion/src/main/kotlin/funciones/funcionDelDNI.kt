@@ -20,14 +20,16 @@ fun funTransformarDniNumerico(dni: String):Int {
 }
 
 /**
- * Divide el número del dni entre 23 y el resto que de se le asigna una letra
+ * Divide el número del dni o del pasaporte  entre 23 y el resto que de, se le asigna una letra
  * @param numeroDni es el número del DNI
  * @return letra devuele la letra del DNI
  */
 
-fun funDividirDni(numeroDni: Int):Char {
+fun funDividirNumero(numeroDni: Int):Char {
     var letra = ' '
-    when(numeroDni%23){
+    var numero = numeroDni%23
+
+    when(numero){
         0 -> letra ='T'
         1 -> letra ='R'
         2 -> letra ='W'
@@ -53,12 +55,13 @@ fun funDividirDni(numeroDni: Int):Char {
         22 -> letra ='E'
 
     }
+
     return letra
 
 }
 
 /**
- * Comprueba si la letra es igual a la letra del dni
+ * Comprueba si la letra es igual a la letra del dni o pasaporte
  * @param letra
  * @param dni
  * @return salida devuelve un booleano si la letra es igual a la letra del dni devuelve un true
@@ -66,11 +69,11 @@ fun funDividirDni(numeroDni: Int):Char {
 fun funComprobaLetra(letra: Char, dni: String): Boolean {
     var salida = false
     if (letra == dni.last()){
-        println("El DNI $dni existe")
+        println("El $dni existe")
         salida = true
     }else{
-        println("el Dni $dni no existe")
-        println("vuelva a introdcir el DNI")
+        println("El $dni no existe")
+
 
     }
     return salida
@@ -89,8 +92,13 @@ fun funComprobarLetraDni(dni: String, numero: Boolean): Boolean {
         if (dni[dni.length-1] in 'A'..'Z'){
             if (dni[dni.length-1] != 'I' && dni[dni.length-1] != 'O' && dni[dni.length-1] != 'U' && dni[dni.length-1] != 'Ñ'){
                 letra = true
-            }
+                println("letras del DNI $dni correctasa")
+            }else(
+                println("letras del DNI $dni incorrectas")
+            )
 
+        }else{
+            println("letra del DNI $dni incorrecta")
         }
     }
     return letra
@@ -99,7 +107,7 @@ fun funComprobarLetraDni(dni: String, numero: Boolean): Boolean {
 /**
  * Comprueba si los primeros 8 digitos son numeros
  * @dni
- * retrun numero devuelve un booleano si los 8 primeros digitos son numeros devuelve un true
+ * @return numero devuelve un booleano si los 8 primeros digitos son numeros devuelve un true
  */
 
 fun funComprobarNumeroDni(dni: String):Boolean {
@@ -114,7 +122,10 @@ fun funComprobarNumeroDni(dni: String):Boolean {
 
     if (contador == dni.length-1){
         numero = true
+        println("numero del DNI $dni correcto")
 
+    }else{
+        println("numero del DNI $dni incorrecto")
     }
 
     return numero

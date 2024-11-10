@@ -1,60 +1,138 @@
 package org.example
 import org.lighthousegames.logging.logging
+
 const val VACIO = 0
 const val DARYL = 1
 const val ZOMBIE = 2
 const val MURO = 3
 const val SALUD = 4
-const val MUNICION = 7
 const val MAX_ZOMBIE = 5
 const val MAX_MURO = 10
 const val MAX_SALUD = 3
 const val TAMAYO = 5
 const val MAX_VIDA = 10
 const val MAX_MUNICION = 10
-const val SEGUNDA_FILA = 1
-const val POSICION_ZOMBIE = 0
-const val POSICION_VIDA = 1
-const val POSICION_MUNICION = 3
+const val POSITION_ZOMBIE = 0
+const val POSITION_VIDA = 1
+const val POSITION_MUNICION = 2
+const val MAX_TIEMPO = 30_000
+val logger = logging()
 
 fun main() {
-
     val alexandria = Array(TAMAYO){IntArray(TAMAYO)}
-    val logger = logging()
-    var conteo = arrayOf(arrayOf(ZOMBIE, SALUD, MUNICION), arrayOf(MAX_ZOMBIE, MAX_VIDA, MAX_MUNICION))
+    val conteo = arrayOf(0, MAX_VIDA, MAX_MUNICION)
 
     llenarAlexandria(alexandria)
     imprimirAlexandria(alexandria)
+    Thread.sleep(1000)
     simularJuego(alexandria, conteo)
+    hacerInforme(conteo, alexandria)
 
 }
 
+/**
+ * Es una funcion para crear el informe final de la simulacion
+ * @param conteo es para almacenar la información índice 0 los zombies rematados, 1 la vida y 2 municion
+ * @param alexandria
+ */
+fun hacerInforme(conteo: Array<Int>, alexandria: Array<IntArray>) {
+    if (alexandria[4][4] == DARYL){
+        println("has conseguido escapar")
+    }
+    println("Muertes de Zombies ${conteo[POSITION_ZOMBIE]}")
+    println("vida ${conteo[POSITION_VIDA]}")
+    println("Municion ${conteo[POSITION_MUNICION]}")
 
+}
 
-fun simularJuego(alexandria: Array<IntArray>, conteo: Array<Array<Int>>) {
-
+/**
+ * Donde se realiza la simulacion
+ * @param alexandria
+ * @param conteo
+ */
+fun simularJuego(alexandria: Array<IntArray>, conteo: Array<Int>) {
+    var tiempoSalida = 0
+    var contadorZombie = 0
     val copyBuffer = alexandria.copyOf()
-    for (i in alexandria.indices){
-        for (j in alexandria.indices){
+    val inicio = System.currentTimeMillis()
+    do {
+        for (i in alexandria.indices){
+            for (j in alexandria.indices){
 
-            if (alexandria[i][j] == DARYL){
-                irNuevaPosicion(i,j,copyBuffer,alexandria, conteo)
+                if (alexandria[i][j] == DARYL){
+                    irNuevaPosicion(i,j,copyBuffer,alexandria, conteo)
+                    imprimirAlexandria(alexandria)
+                }
+                if (contadorZombie == 5){
+                    colocacion(1, ZOMBIE,alexandria)
+                    conteo[POSITION_ZOMBIE]+=1
+                    contadorZombie = 0
+                    println("zombie nuevo")
 
+                }
             }
 
-
         }
-    }
+        copiarBuffer(alexandria,copyBuffer)
 
-    imprimirAlexandria(alexandria)
+        val fin = System.currentTimeMillis()
+
+        println(fin -inicio)
+
+        Thread.sleep(1000)
+        tiempoSalida+=1000
+        contadorZombie++
+    }while (conteo[POSITION_VIDA] != 0 && alexandria[4][4] != DARYL && tiempoSalida < MAX_TIEMPO)
+
+
+
+
 }
 
-fun irNuevaPosicion(i: Int, j: Int, copyBuffer: Array<IntArray>, alexandria: Array<IntArray>, conteo: Array<Array<Int>>) {
+/**
+ * Copia toda la información el buffer en la matriz original
+ * @param alexandria matriz original
+ * @param copyBuffer
+ */
+fun copiarBuffer(alexandria: Array<IntArray>, copyBuffer: Array<IntArray>) {
+    for (i in alexandria.indices){
+        for (j in alexandria.indices){
+            alexandria[i][j]= copyBuffer[i][j]
+        }
+    }
+}
+
+/**
+ * Si DARYL está en el borde del mapa se cambia la posicion dependiendo donde este
+ * @param posicion puede ser fila o culumna
+ */
+fun moverlimite(posicion: Int): Int {
+    var ubicacion = posicion
+    when (posicion){
+        0 -> {
+            ubicacion+=1
+        }
+        4 -> {
+            ubicacion-=1
+        }
+    }
+    return ubicacion
+}
+
+/**
+ * Verifica que hay en la position donde se va a mover Daryl y dependiendo de lo que haya realiza la accion
+ * @param i
+ * @param j
+ * @param copyBuffer
+ * @param alexandria
+ * @param conteo
+ */
+fun irNuevaPosicion(i: Int, j: Int, copyBuffer: Array<IntArray>, alexandria: Array<IntArray>, conteo: Array<Int>) {
     var salida = false
     var fila:Int
     var columna:Int
-
-
+    var nf:Int
+    var nc:Int
 
 
     do {
@@ -67,45 +145,87 @@ fun irNuevaPosicion(i: Int, j: Int, copyBuffer: Array<IntArray>, alexandria: Arr
                 moverDarly(fila,columna,i,j,copyBuffer)
                 salida = true
             }else if (alexandria[fila][columna]== ZOMBIE){
-                moverDarly(fila, columna, i, j, copyBuffer)
                 encuentroZombie(conteo)
+                moverDarly(fila, columna, i, j, copyBuffer)
                 salida = true
             }else if (alexandria[fila][columna]== MURO){
-                if (conteo[SEGUNDA_FILA][POSICION_MUNICION] > 2){
-
+                if (conteo[POSITION_MUNICION] > 2){
+                    conteo[POSITION_MUNICION] -= 2
+                    logger.info {"Menos 2 municion ${conteo[POSITION_MUNICION]}"}
+                    moverDarly(fila, columna, i, j, copyBuffer)
                     salida = true
                 }
             }else if (alexandria[fila][columna]== SALUD){
                 moverDarly(fila,columna,i,j,copyBuffer)
-                conteo[SEGUNDA_FILA][POSICION_MUNICION]+=1
+                conteo[POSITION_VIDA]+=1
+                logger.info {"Mas 1 vida ${conteo[POSITION_VIDA]}"}
+                salida = true
 
             }
-        }
 
+            if (copyBuffer[4][4]!= DARYL){
+                if (fila == 0 || fila == 4 || columna == 0 || columna ==4){
+                   nf = moverlimite (fila)
+                    nc = moverlimite(columna)
+                    moverDarly(nf, nc, fila, columna, copyBuffer)
+                }
+            }
+
+        }
 
     }while (!salida)
 
 }
 
-fun encuentroZombie(conteo: Array<Array<Int>>) {
+/**
+ * Si se encuentra con un zombie saber que accion  realizar
+ * @param conteo
+ */
+fun encuentroZombie(conteo: Array<Int>) {
 
     if (50 > (0..100).random()){
-        conteo[SEGUNDA_FILA][POSICION_VIDA] -=1
-    }else if (conteo[SEGUNDA_FILA][POSICION_MUNICION] > 0){
-        conteo[SEGUNDA_FILA][POSICION_MUNICION] -=1
-        conteo[SEGUNDA_FILA][POSICION_ZOMBIE] -= 1
-    }else{
-        conteo[SEGUNDA_FILA][POSICION_VIDA]-=2
-        conteo[SEGUNDA_FILA][POSICION_ZOMBIE]-=1
+        conteo[POSITION_VIDA] -=1
+        logger.info {"Menos 1 vida ${conteo[POSITION_VIDA]}"}
+
+
     }
+    if (conteo[POSITION_MUNICION] > 0){
+        logger.info {"Menos 1 bala ${conteo[POSITION_MUNICION]}"}
+        conteo[POSITION_MUNICION] -=1
+        conteo[POSITION_ZOMBIE] += 1
+    }else{
+        conteo[POSITION_VIDA]-=2
+        logger.info {"Menos 2 vida ${conteo[POSITION_VIDA]}"}
+        conteo[POSITION_ZOMBIE]+=1
+    }
+
+    logger.info {"zombie muerto ${conteo[POSITION_ZOMBIE]}"}
+
+
 }
 
-
+/**
+ * Mueve a Daryl a una nueva posicion y pone a 0 su antigua posicion
+ * @param i la antigua fila
+ * @param j la antigua columna
+ * @param fila la nueva columna
+ * @param columna la nueva columna
+ * @param copyBuffer
+ */
 fun moverDarly(fila: Int, columna: Int, i: Int, j: Int, copyBuffer: Array<IntArray>) {
     copyBuffer[fila][columna]= DARYL
     copyBuffer[i][j] = VACIO
+
+    logger.info {"Darly esta en la posicion $i:$j"}
+    logger.info {"Darly cambia en la posicion $fila:$columna"}
+
 }
 
+/**
+ * Verifica que a la posicion que va a ir DARLY está dentro del rango de la matriz
+ * @param fila
+ * @param columna
+ */
 fun comprobarPosicion(fila: Int, columna: Int): Boolean {
     return fila in 0 ..< TAMAYO && columna in 0 ..< TAMAYO
 }
@@ -128,51 +248,39 @@ fun imprimirAlexandria(alexandria: Array<IntArray>) {
     println()
 }
 
-fun llenarAlexandria(
-    alexandria: Array<IntArray>,
+/**
+ * Es para saber qué colocar en la matriz y cuantas veces
+ * @param alexandria
+ */
+fun llenarAlexandria(alexandria: Array<IntArray>) {
 
-) {
-    var contadorZombie = 0
-    var contadorMuro = 0
-    var contadorSalud = 0
-    var fila = (0..4).random()
-    var columna = (0..4).random()
-
-
-    alexandria[fila][columna] = DARYL
-
-    do {
-        fila = (0..4).random()
-        columna = (0..4).random()
-        repeat(MAX_ZOMBIE){
-            if (alexandria[fila][columna]== VACIO){
-                alexandria[fila][columna] = ZOMBIE
-                contadorZombie ++
-            }
-        }
-    }while (contadorZombie != MAX_ZOMBIE)
-
-    do {
-        fila = (0..4).random()
-        columna = (0..4).random()
-        repeat(MAX_MURO){
-            if (alexandria[fila][columna]== 0){
-                alexandria[fila][columna] = MURO
-                contadorMuro ++
-            }
-        }
-    }while (contadorMuro != MAX_MURO)
-
-    do {
-        fila = (0..4).random()
-        columna = (0..4).random()
-        repeat(MAX_SALUD){
-            if (alexandria[fila][columna]== 0){
-                alexandria[fila][columna] = SALUD
-                contadorSalud ++
-            }
-        }
-    }while (contadorSalud != MAX_SALUD)
-
+    colocacion(1, DARYL,alexandria)
+    colocacion(MAX_ZOMBIE, ZOMBIE, alexandria)
+    colocacion(MAX_MURO, MURO,alexandria)
+    colocacion(MAX_SALUD, SALUD,alexandria)
 
 }
+
+/**
+ * Colocar en la matriz los diferentes objetos
+ * @param max el numero de objetos a colocar
+ * @param poner que objeto colocar
+ * @param alexandria
+ */
+fun colocacion(max: Int, poner: Int, alexandria: Array<IntArray>) {
+    var contador = 0
+
+    do {
+
+        val fila = (0..4).random()
+        val columna = (0..4).random()
+        repeat(max){
+            if (alexandria[fila][columna]== VACIO){
+                alexandria[fila][columna] = poner
+                contador ++
+            }
+        }
+    }while (contador != max)
+}
+
+

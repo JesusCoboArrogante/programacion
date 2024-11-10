@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.0.20"
+    id("org.jetbrains.dokka") version "1.9.20"
 }
 
 group = "org.example"
@@ -31,5 +32,5 @@ tasks.jar {
         if (it.isDirectory) it else zipTree(it)
     })
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    archiveFileName.set("dni-pasaporte.jar")
+    archiveFileName.set("walking_dead.jar")
 }

@@ -1,10 +1,10 @@
 package models
 
-class alumno(
-    id:Int,
-    nombre:String,
-    apellido:String,
-    calificacion:Double
+data class alumno(
+    val id:Int,
+    val nombre:String,
+    val apellido:String,
+    val calificacion:Double
 ) {
     companion object{
         fun alumnado(){

@@ -26,7 +26,6 @@ fun main() {
 fun actualizacion() {
     var seleccion = 0
     println("que quieres actualizar")
-
     println("1. nombre\n 2. Apellido\n 3. Notas")
     seleccion = readln().toIntOrNull()?:0
     when(seleccion){
@@ -39,6 +38,7 @@ fun actualizacion() {
 
 fun nombre() {
     var nombre = ""
+    println ("")
 
 }
 

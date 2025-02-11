@@ -61,4 +61,30 @@ class aula {
 
     }
 
+    private fun existir(id: Int):Boolean{
+        var existir = false
+        for (i in listaClase.indices){
+            for (j in listaClase.indices){
+                if (listaClase[i][j]?.id == id){
+                    existir = true
+                    return existir
+                }
+            }
+        }
+        return existir
+    }
+
+    fun cambiarnombre(id: Int, nombre: String) {
+
+        if (existir(id)){
+            for (i in listaClase.indices){
+                for (j in listaClase.indices){
+                    if (listaClase[i][j]?.id == id){
+                        listaClase[i][j]?.nombre = nombre
+                    }
+                }
+            }
+        }
+    }
+
 }

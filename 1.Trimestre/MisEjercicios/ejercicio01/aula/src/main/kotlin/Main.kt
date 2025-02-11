@@ -15,7 +15,7 @@ fun main() {
         when(eleccion){
             1 -> agregar()
             2 -> clase.imprimirListado()
-            3 -> actualizacion()
+            3 -> nombre()
             4 -> borrar()
 
         }
@@ -23,22 +23,18 @@ fun main() {
     }while (eleccion != 5)
 }
 
-fun actualizacion() {
-    var seleccion = 0
-    println("que quieres actualizar")
-    println("1. nombre\n 2. Apellido\n 3. Notas")
-    seleccion = readln().toIntOrNull()?:0
-    when(seleccion){
-        1 -> nombre()
-        2 -> apellido()
-        3 -> notas()
-    }
-
-}
 
 fun nombre() {
+    var id = 0
+    println("introduce el id del alumno que quieras cambias")
+    id = readln().toIntOrNull()?:0
     var nombre = ""
-    println ("")
+    println ("introduce el nuevo nombre")
+    nombre = readln()
+
+    clase.cambiarnombre(id, nombre)
+
+
 
 }
 

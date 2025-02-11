@@ -2,7 +2,7 @@ package models
 
 data class alumno(
     val id:Int,
-    val nombre:String,
+    var nombre:String,
     val apellido:String,
     val calificacion:Double
 ) {

@@ -11,10 +11,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
-    implementation(kotlin("stdlib-jdk8"))
-
-
+    implementation("org.xerial:sqlite-jdbc:3.41.2.1")
 }
 
 tasks.test {
@@ -22,5 +19,4 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(21)
-    jvmToolchain(8)
 }

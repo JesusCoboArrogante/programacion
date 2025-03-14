@@ -11,10 +11,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
-    implementation(kotlin("stdlib-jdk8"))
-
-
+    implementation("com.h2database:h2:2.1.214")
 }
 
 tasks.test {
@@ -22,5 +19,4 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(21)
-    jvmToolchain(8)
 }

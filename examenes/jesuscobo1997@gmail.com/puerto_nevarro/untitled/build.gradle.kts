@@ -11,10 +11,6 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
-    implementation(kotlin("stdlib-jdk8"))
-
-
 }
 
 tasks.test {
@@ -22,5 +18,4 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(21)
-    jvmToolchain(8)
 }
